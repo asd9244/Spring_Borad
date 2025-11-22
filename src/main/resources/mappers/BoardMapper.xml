@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+1. XML Mapper: 마이바티스에서 SQL 쿼리문이 정의되어 있는 파일
+2. <mapper> → Mapper 인터페이스의 메서드 매핑을 위한 지정하는 속성
+3. <sql> → SQL을 정의하기 위한 태그, 태그의 시작과 끝 사이에는 쿼리문과 관련된 여러 태그를 작성
+4. <include> → <sql> 태그에 정의한 boardColumns SQL에 사용되는 속성
+5. paremeterType → 파라미터 타입 속성 지정
+6. resultType → 쿼리의 실행 결과 매핑 타입 지정
+7. Parameter expression → #{}                               -->
+
+<mapper namespace="com.board.mapper.BoardMapper">
+    <sql id="boardColums">
+        idx
+        , title
+        , content
+        , writer
+        , view_cnt
+        , noticeYn
+        , secretYn
+        , deleteYn
+        , insertTime
+        , updateTime
+        , deleteTime
+    </sql>
+
+    <insert id="insertBoard" parameterType="BoardDTO">
+    INSERT INTO board (
+        <include refid="boardColumns"/>
+    ) VALUES (
+            #{idx}
+        , #{title}
+        , #{content}
+        , #{writer}
+        , 0
+        , IFNULL(#{noticeYn}, 'N')
+        , IFNULL(#{secretYn}, 'N')
+        , 'N'
+        , NOW()
+        , NULL
+        , NULL
+    )
+    </insert>
+
+    <select id="selectBoardDetail" parameterType="long" resultType="BoardDTO">
+        SELECT
+        <include refid="boardColumns"/>
+        FROM
+            Board
+        WHERE
+            delete_yn = 'N'
+        AND
+            idx = #{idx}
+    </select>
+
+    <update id="updateBoard" parameterType="BoardDTO">
+        UPDATE board
+        SET
+              update_time = NOW()
+            , title = #{title}
+            , content = #{content}
+            , writer = #{writer}
+            , IFNULL(#{noticeYn}, 'N')
+            , IFNULL(#{secretYn}, 'N')
+        WHERE
+            idx = #{idx}
+    </update>
+
+    <update id="deleteBoard" parameterType="long">
+        UPDATE board
+        SET
+              delete_yn = 'Y'
+            , delete_time = now()
+        WHERE
+            idx = #{idx}
+    </update>
+
+    <select id="selectBoardList" parameterType="BoardDTO" resultType="BoardDTO">
+        SELECT
+        <include refid="boardColumns" />
+        FROM
+        board
+        WHERE
+        delete_yn = 'N'
+        ORDER BY
+        notice_yn ASC,
+        idx DESC,
+        insert_time DESC
+    </select>
+
+    <select id="selectBoardTotalCount" parameterType="BoardDTO" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            board
+        WHERE
+            delete_yn = 'N'
+    </select>
+
+</mapper>
