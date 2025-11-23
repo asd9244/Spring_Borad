@@ -1,8 +1,7 @@
 package com.board.configuration;
 
-import javax.sql.DataSource;
-import javax.swing.*;
-
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -13,8 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
 
 @Configuration // spring 설정을 담당하는 클레스라는 표시. 이 클래스 안의 @Bean 붙은 메서드들이 Spring이 관리하는 Bean으로 자동등록.
 @PropertySource("classpath:/application.properties") // 해당 클래스에서 참조할 properties 파일 위치 지정
@@ -24,9 +22,10 @@ public class DBConfiguration {
     private ApplicationContext applicationContext; // 권한: Bean검색 및 조작, 환경, 리소스 접근(Properties, xml)
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.hikari") // 외부 설정 자동 매핑: 메서드에서 반환하는 객체에 해당 주소에 있는 값들을 자동으로 채워 넣는다.
+    @ConfigurationProperties(prefix = "spring.datasource.hikari")
+    // 외부 설정 자동 매핑: 메서드에서 반환하는 객체에 해당 주소에 있는 값들을 자동으로 채워 넣는다.
     public HikariConfig hikariConfig() { // 1. HikariConfig() 객체 생성
-        return new HikariConfig(); 		 // 2. .Properties파일의 "spring.datasource.hikari"로 시작하는 모든 데이터를 HikariConfig객체에 담아서 반환.
+        return new HikariConfig();         // 2. .Properties파일의 "spring.datasource.hikari"로 시작하는 모든 데이터를 HikariConfig객체에 담아서 반환.
     }
 
     @Bean
