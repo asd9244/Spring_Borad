@@ -51,15 +51,14 @@ public class BoardServiceImpl implements BoardService {
 
     // 전체 게시글 조회
     @Override
-    public List<BoardDTO> getBoardList() { // 1. 게시글 목록을 저장할 boardList 변수 선언
-        List<BoardDTO> boardList = Collections.emptyList(); // 2. 빈, 변경불가능한 List 할당
-
+    public List<BoardDTO> getBoardList() {
+        List<BoardDTO> boardList = Collections.emptyList(); // 1. 게시글 목록을 저장할 boardList 변수 선언
+                                                            // 2. 빈, 변경불가능한 List 할당
         int boardTotalCount = boardMapper.selectBoardTotalCount();// 3. 삭제여부가 N인 게시물 개수 조회
 
         if (boardTotalCount > 0) {// 4. 게시물 개수가 0보다 크면 boardList에 게시물 할당.
             boardList = boardMapper.selectBoardList();
         }
-
         return boardList;
     }
 

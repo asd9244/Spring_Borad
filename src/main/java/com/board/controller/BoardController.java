@@ -51,10 +51,27 @@ public class BoardController {
     }
 
     // 게시글 목록 처리
-    @GetMapping(value = "/board/list.do")
+    @GetMapping(value = "/board/list.do") // GET방식의 HTTP요청 메서드
     public String openBoardList(Model model) {
-        List<BoardDTO> boardList = boardService.getBoardList();
+        List<BoardDTO> boardList = boardService.getBoardList();// 전체 게시글 데이터를 boardList객체에 할당
+        // addAttribute메서드가 boardList객체에 "boardList"라는 속성(이름)을 부여하고 model객체에 넣음.
         model.addAttribute("boardList", boardList);
-        return "board/list";
+        return "board/list"; //list.html에서는 model객체에서 boardList라는 속성을 가진 객체를 찾아서 사용.
+    }
+
+    // 게시글 조회 처리
+    @GetMapping(value = "/board/view.do")
+    public String openBoardDetail(@RequestParam(value = "idx", required = false) Long idx, Model model) {
+        if(idx == null) {
+            // TODO => 올바르지 않은 접근이라는 메시지를 전달하고, 게시글 리스트로 리다이렉트
+            return "redirect:/board/list.do";
+        }
+        BoardDTO board = boardService.getBoardDetail(idx);
+        if (board == null || "Y".equals(board.getDeleteYn())) { // 받아온 idx로 게시글 조회해서 없거나, 삭제되었으면 리스트로
+            // TODO => 없는 게시글이거나, 이미 삭제된 게시글이라는 메시지를 전달하고, 게시글 리스트로 리다이렉트
+            return "redirect:/board/list.do";
+        }
+        model.addAttribute("board", board);
+        return "board/view";
     }
 }
