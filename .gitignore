@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Include static resources
+!src/main/resources/static/
+!src/main/resources/static/**
