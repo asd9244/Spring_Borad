@@ -1,19 +1,24 @@
 package com.board.controller;
 
+import com.board.constant.Method;
 import com.board.domain.BoardDTO;
+import com.board.paging.Criteria;
 import com.board.service.BoardService;
+import com.board.util.UiUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Controller // Controller는 사용자의 요청(URI)을 처리하고, 결과를 담아 View(화면)를 반환하는 역할을 합니다.
-public class BoardController {
+public class BoardController extends UiUtils {
+
 
     @Autowired // 스프링이 BoardService 인터페이스의 구현체인 BoardServiceImpl을 변수에 주입.
     private BoardService boardService; // 이 클레스에서는 BoardServiceImpl의 메소드를 사용 가능.
@@ -34,26 +39,27 @@ public class BoardController {
         return "board/write";// board/write 라는 이름의 html파일을 반환
     }
 
-    // 게시글 등록
+    //     게시글 등록(글쓰기)
     @PostMapping(value = "/board/register.do")
-    public String registerBoard(final BoardDTO params) {
+    public String registerBoard(final BoardDTO params, Model model) {
         try {
             boolean isRegistered = boardService.registerBoard(params);
             if (isRegistered == false) {
-                // TODO => 게시글 등록에 실패했다는 메시지 전달.
+                return showMessageWithRedirect("게시글 등록에 실패하였습니다.", "/board/list.do", Method.GET, null, model);
             }
         } catch (DataAccessException e) {
-            // TODO => 데이터 베이스 처리 과정에 문제가 발생했다는 메시지 전달.
+            return showMessageWithRedirect("데이터베이스 처리 과정에 문제가 발생하였습니다.", "/board/list.do", Method.GET, null, model);
         } catch (Exception e) {
-            // TODO => 시스템에 문제가 발생했다는 메시지 전달.
+            return showMessageWithRedirect("시스템에 문제가 발생하였습니다.", "/board/list.do", Method.GET, null, model);
         }
-        return "redirect:/board/list.do";
+        return showMessageWithRedirect("게시글 등록이 완료되었습니다.", "/board/list.do", Method.GET, null, model);
     }
+
 
     // 게시글 목록 처리
     @GetMapping(value = "/board/list.do") // GET방식의 HTTP요청 메서드
-    public String openBoardList(Model model) {
-        List<BoardDTO> boardList = boardService.getBoardList();// 전체 게시글 데이터를 boardList객체에 할당
+    public String openBoardList(@ModelAttribute("criteria") Criteria criteria, Model model) { // ModelAttribute == 파라미터로 전달받은 객체를 자동으로 뷰까지 전달
+        List<BoardDTO> boardList = boardService.getBoardList(criteria);// 전체 게시글 데이터를 boardList객체에 할당
         // addAttribute메서드가 boardList객체에 "boardList"라는 속성(이름)을 부여하고 model객체에 넣음.
         model.addAttribute("boardList", boardList);
         return "board/list"; //list.html에서는 model객체에서 boardList라는 속성을 가진 객체를 찾아서 사용.
@@ -76,22 +82,21 @@ public class BoardController {
     }
 
     @PostMapping(value = "/board/delete.do")
-    public String deleteBoard(@RequestParam(value = "idx", required = false) Long idx) {
+    public String deleteBoard(@RequestParam(value = "idx", required = false) Long idx, Model model) {
         if (idx == null) {
-            // TODO => 올바르지 않은 접근이라는 메시지를 전달하고, 게시글 리스트로 리다이렉트
-            return "redirect:/board/list.do";
+            return showMessageWithRedirect("올바르지 않은 접근입니다.", "/board/list.do", Method.GET, null, model);
         }
         try {
             boolean isDeleted = boardService.deleteBoard(idx);
             if (isDeleted == false) {
-                // TODO => 게시글 삭제에 실패하였다는 메시지를 전달
+                return showMessageWithRedirect("게시글 삭제에 실패하였습니다.", "/board/list.do", Method.GET, null, model);
             }
         } catch (DataAccessException e) {
-            // TODO => 데이터베이스 처리 과정에 문제가 발생하였다는 메시지를 전달.
+            return showMessageWithRedirect("데이터베이스 처리 과정에 문제가 발생하였습니다.", "/board/list.do", Method.GET, null, model);
         } catch (Exception e) {
-            // TODO =>
+            return showMessageWithRedirect("시스템에 문제가 발생하였습니다.", "/board/list.do", Method.GET, null, model);
         }
-        return "redirect:/board/list.do";
+        return showMessageWithRedirect("게시글 삭제가 완료되었습니다.", "/board/list.do", Method.GET, null, model);
     }
 
 

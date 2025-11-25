@@ -1,13 +1,13 @@
 package com.board.service;
 
-import java.util.Collections;
-import java.util.List;
-
+import com.board.domain.BoardDTO;
+import com.board.mapper.BoardMapper;
+import com.board.paging.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.board.domain.BoardDTO;
-import com.board.mapper.BoardMapper;
+import java.util.Collections;
+import java.util.List;
 
 @Service // 비즈니스 로직을 담당하는 서비스 클래스 선언
 public class BoardServiceImpl implements BoardService {
@@ -51,13 +51,13 @@ public class BoardServiceImpl implements BoardService {
 
     // 전체 게시글 조회
     @Override
-    public List<BoardDTO> getBoardList() {
+    public List<BoardDTO> getBoardList(Criteria criteria) {
         List<BoardDTO> boardList = Collections.emptyList(); // 1. 게시글 목록을 저장할 boardList 변수 선언
-                                                            // 2. 빈, 변경불가능한 List 할당
-        int boardTotalCount = boardMapper.selectBoardTotalCount();// 3. 삭제여부가 N인 게시물 개수 조회
+        // 2. 빈, 변경불가능한 List 할당
+        int boardTotalCount = boardMapper.selectBoardTotalCount(criteria);// 3. 삭제여부가 N인 게시물 개수 조회
 
         if (boardTotalCount > 0) {// 4. 게시물 개수가 0보다 크면 boardList에 게시물 할당.
-            boardList = boardMapper.selectBoardList();
+            boardList = boardMapper.selectBoardList(criteria);
         }
         return boardList;
     }

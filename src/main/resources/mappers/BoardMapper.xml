@@ -71,7 +71,8 @@
         WHERE idx = #{idx}
     </update>
 
-    <select id="selectBoardList" parameterType="BoardDTO" resultType="BoardDTO">
+
+    <select id="selectBoardList" parameterType="Criteria" resultType="BoardDTO">
         SELECT
         <include refid="boardColumns"/>
         FROM
@@ -82,9 +83,14 @@
         notice_yn ASC,
         idx DESC,
         insert_time DESC
+        <!-- MySQL에서 LIMIT 구문은 데이터를 원하는 만큼 가져오고 싶을 때 활용 -->
+        LIMIT
+        <!-- startPage == Criteria 클래스의 getStartPage 메서드의 리턴 값
+         recordsPerPage 페이지당 출력할 데이터의 개수 -->
+        #{startPage}, #{recordsPerPage}
     </select>
 
-    <select id="selectBoardTotalCount" parameterType="BoardDTO" resultType="int">
+    <select id="selectBoardTotalCount" parameterType="Criteria" resultType="int">
         SELECT COUNT(*)
         FROM board
         WHERE delete_yn = 'N'
