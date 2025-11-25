@@ -38,7 +38,7 @@ public class DBConfiguration {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean(); // SqlSessionFactoryBean == MyBatis 설정용 spring클래스 = 컨테이너,빌더 역할
         factoryBean.setDataSource(dataSource()); // 4. factoryBean객체에 dataSource()='DB연결정보' 를 할당.
         factoryBean.setMapperLocations(applicationContext.getResources("classpath:/mappers/**/*Mapper.xml")); // 5. factoryBean 객체에게 /mappers 폴더 아래의 모든 하위폴더**/ 안에 있는 *Mapper.xml로 끝나는 모든 xml파일을 Mapper로 등록.
-        factoryBean.setTypeAliasesPackage("com.board.domain"); // 6. XML Mapper에서 Type에 객체 전체 이름을 적는 대신, 주소안의 내용은 생략할 수 있게 설정.
+        factoryBean.setTypeAliasesPackage("com.board.*"); // 6. XML Mapper에서 Type에 객체 전체 이름을 적는 대신, 주소안의 내용은 생략할 수 있게 설정.
         factoryBean.setConfiguration(mybatisConfig()); // 7. factoryBean에 Mybatis의 작동 방식을 설정한 mybatisConfig() 객체 주입.
         return factoryBean.getObject(); // 8. factoryBean의 모든 설정 정보를 사옹해서 MyBatis가 실제로 사용할 수 있는 최종 결과물인 SqlSessionFactory 객체를 새로 만들어서 반환
     }
