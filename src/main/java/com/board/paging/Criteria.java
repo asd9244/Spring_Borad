@@ -1,5 +1,8 @@
 package com.board.paging;
 
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
 public class Criteria {
 
     private int currentPageNo; // 현재 페이지 번호
@@ -12,6 +15,19 @@ public class Criteria {
         this.currentPageNo = 1; // 화면을 처리할 때 페이징 정보를 계산하는 용도로 사용되는 변수
         this.recordsPerPage = 10; // 화면 처리에서 페이징 정보 계산에 사용
         this.pageSize = 10; //  10으로 지정하면 1~10까지의 페이지가 출력
+    }
+
+    public String makeQueryString(int pageNo) {
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                .queryParam("currentPageNo", pageNo)
+                .queryParam("recordsPerPage", recordsPerPage)
+                .queryParam("pageSize", pageSize)
+                .queryParam("searchType", searchType)
+                .queryParam("searchKeyword", searchKeyword)
+                .build()
+                .encode();
+
+        return uriComponents.toUriString();
     }
 
     public int getStartPage() { // MySQL에서 LIMIT 구문의 앞부분에 사용되는 메서드

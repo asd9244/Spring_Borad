@@ -2,9 +2,9 @@ package com.board.controller;
 
 import com.board.constant.Method;
 import com.board.domain.BoardDTO;
-import com.board.paging.Criteria;
 import com.board.service.BoardService;
 import com.board.util.UiUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
@@ -58,9 +58,11 @@ public class BoardController extends UiUtils {
 
     // 게시글 목록 처리
     @GetMapping(value = "/board/list.do") // GET방식의 HTTP요청 메서드
-    public String openBoardList(@ModelAttribute("criteria") Criteria criteria, Model model) { // ModelAttribute == 파라미터로 전달받은 객체를 자동으로 뷰까지 전달
-        List<BoardDTO> boardList = boardService.getBoardList(criteria);// 전체 게시글 데이터를 boardList객체에 할당
-        // addAttribute메서드가 boardList객체에 "boardList"라는 속성(이름)을 부여하고 model객체에 넣음.
+    public String openBoardList(@ModelAttribute("params") BoardDTO params, HttpServletRequest request, Model model) { // ModelAttribute == 파라미터로 전달받은 객체를 자동으로 뷰까지 전달
+        List<BoardDTO> boardList = boardService.getBoardList(params);// 전체 게시글 데이터를 boardList객체에 할당
+        // addAttribute메서드가 객체에 "  "라는 속성(이름)을 부여하고 model객체에 넣음.
+        // requestURI == 현제 URI경로를 model객체에 넣음. 이 경로는 페이징 버튼 등을 만들 때 사용 가능.
+        model.addAttribute("requestURI", request.getRequestURI());
         model.addAttribute("boardList", boardList);
         return "board/list"; //list.html에서는 model객체에서 boardList라는 속성을 가진 객체를 찾아서 사용.
     }
@@ -81,6 +83,7 @@ public class BoardController extends UiUtils {
         return "board/view";
     }
 
+    // 게시물 삭제
     @PostMapping(value = "/board/delete.do")
     public String deleteBoard(@RequestParam(value = "idx", required = false) Long idx, Model model) {
         if (idx == null) {

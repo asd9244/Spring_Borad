@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorate="~{board/layout/basic}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="ko" layout:decorator="~{board/layout/basic}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
-
 <th:block layout:fragment="title">
     <title>This page is a list page</title>
 </th:block>
-<!--
- layout:fragment="search": 게시글 리스트에서 특정 게시글을 검색할 수 있는 영역
- -->
 <th:block layout:fragment="search">
     <form action="#" class="searchform js_toggle active pull-right" id="searchform-header">
         <input class="input-search" placeholder="Search..." type="search">
@@ -16,9 +12,6 @@
         </button>
     </form>
 </th:block>
-<!--
-layout:fragment="content": 리스트 페이지의 실제 Content가 포함된 영역
--->
 <th:block layout:fragment="content">
     <div class="table-responsive clearfix">
         <table class="table table-hover">
@@ -31,53 +24,41 @@ layout:fragment="content": 리스트 페이지의 실제 Content가 포함된 �
                 <th>조회 수</th>
             </tr>
             </thead>
-
             <tbody>
-            <!-- th:if 속성: if문과 같음 -->
             <tr th:each="row : ${boardList}" th:if="${not #lists.isEmpty(boardList)}">
-                <!-- 공지여부가 Y면 공지 출력, 아니면 idx 출력                -->
-                <td scope="row" th:text="${#strings.equals(row.noticeYn, 'Y') ? '공지' : row.idx}"></td>
+                <td scope="row" th:text="${#strings.equals( row.noticeYn, 'Y' ) ? '공지' : row.idx}"></td>
                 <td class="text-left">
-                    <!-- 게시글 제목을 클릭하면 상세 페이지(view)로 이동 -->
                     <a th:href="@{/board/view.do(idx=${row.idx})}" th:text="${row.title}"></a>
                 </td>
-                <td th:text="${row.writer}"></td> <!-- 작성자를 텍스트 형식으로 출력 -->
-                <!-- #temporals.format: 타임리프 유틸리티 객체 == java의 LocalDataTime데이터를 원하는 포멧으로 변경-->
-                <td th:text="${#temporals.format(row.insertTime, 'yyyy-MM-dd')}"></td>
-                <td th:text="${row.viewCnt}"></td> <!-- 특정 게시글의 조회 수를 텍스트 형식으로 출력-->
+                <td th:text="${row.writer}"></td>
+                <td th:text="${#temporals.format( row.insertTime, 'yyyy-MM-dd' )}"></td>
+                <td th:text="${row.viewCnt}"></td>
             </tr>
-            <!-- th:unless 속성: else문과 같지만, 조건을 if문과 동일하게 해야함. 조건이 false일 때 실행.-->
-            <tr th:unless="${not #lists.isEmpty(boardList)}">
+            <tr th:unless="${not #lists.isEmpty( boardList )}">
                 <td colspan="5">조회된 결과가 없습니다.</td>
             </tr>
             </tbody>
         </table>
 
-        <div class="btn_wrap text-right"> <!-- “/board/write.do” URI를 호출해서 신규 글 작성 페이지로 이동 -->
+        <div class="btn_wrap text-right">
             <a class="btn btn-primary waves-effect waves-light" th:href="@{/board/write.do}">Write</a>
         </div>
-        <!-- 리스트에서 특정 페이지로 이동할 수 있는 페이징 영역 -->
+
         <th:block layout:fragment="paging">
-            <nav aria-label="Page navigation" class="text-center">
-                <ul class="pagination">
-                    <li>
-                        <a aria-label="Previous" href="#">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li>
-                        <a aria-label="Next" href="#">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <nav th:replace="~{board/fragments/common :: pagination}"></nav>
         </th:block>
+
     </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        function movePage(uri, queryString) {
+            location.href = uri + queryString;
+        }
+
+        /*]]>*/
+    </script>
 </th:block>
 </html>

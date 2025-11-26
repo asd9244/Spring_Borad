@@ -1,7 +1,6 @@
 package com.board.mapper;
 
 import com.board.domain.BoardDTO;
-import com.board.paging.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -24,9 +23,9 @@ public interface BoardMapper {
     public int deleteBoard(Long idx);
 
     // **검색 조건(Criteria)**에 맞는 게시글 목록을 조회합니다. 페이징 처리 정보(시작 위치, 개수)도 이 객체를 통해 전달받습니다.
-    public List<BoardDTO> selectBoardList(Criteria criteria);
+    public List<BoardDTO> selectBoardList(BoardDTO params);
 
     // **검색 조건(Criteria)**에 맞는 전체 게시글의 개수를 조회하여 페이징 계산에 활용합니다.
-    public int selectBoardTotalCount(Criteria criteria);
+    public int selectBoardTotalCount(BoardDTO params);
 
 }

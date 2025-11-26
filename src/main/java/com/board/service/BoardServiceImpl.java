@@ -2,7 +2,7 @@ package com.board.service;
 
 import com.board.domain.BoardDTO;
 import com.board.mapper.BoardMapper;
-import com.board.paging.Criteria;
+import com.board.paging.PaginationInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,13 +51,19 @@ public class BoardServiceImpl implements BoardService {
 
     // 전체 게시글 조회
     @Override
-    public List<BoardDTO> getBoardList(Criteria criteria) {
+    public List<BoardDTO> getBoardList(BoardDTO params) {
         List<BoardDTO> boardList = Collections.emptyList(); // 1. 게시글 목록을 저장할 boardList 변수 선언
         // 2. 빈, 변경불가능한 List 할당
-        int boardTotalCount = boardMapper.selectBoardTotalCount(criteria);// 3. 삭제여부가 N인 게시물 개수 조회
+        int boardTotalCount = boardMapper.selectBoardTotalCount(params);// 3. 삭제여부가 N인 게시물 개수 조회
 
-        if (boardTotalCount > 0) {// 4. 게시물 개수가 0보다 크면 boardList에 게시물 할당.
-            boardList = boardMapper.selectBoardList(criteria);
+        PaginationInfo paginationInfo = new PaginationInfo(params);
+        paginationInfo.setTotalRecordCount(boardTotalCount);
+
+        params.setPaginationInfo(paginationInfo);
+
+        // 4. 게시물 개수가 0보다 크면 boardList에 게시물 할당.
+        if (boardTotalCount > 0) {
+            boardList = boardMapper.selectBoardList(params);
         }
         return boardList;
     }

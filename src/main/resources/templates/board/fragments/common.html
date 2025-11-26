@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<nav aria-label="Page navigation" class="text-center"
+     th:fragment="pagination" th:if="${params != null and params.paginationInfo.totalRecordCount > 0}"
+     th:object="${params.paginationInfo}"
+     th:with="info=${params.paginationInfo}">
+    <ul class="pagination">
+
+        <li th:if="*{hasPreviousPage == true}"
+            th:onclick="movePage([[${requestURI}]], [[${params.makeQueryString(1)}]])">
+            <a aria-label="Previous" href="javascript:void(0)"><span aria-hidden="true">&laquo;</span></a>
+        </li>
+
+        <li th:if="*{hasPreviousPage == true}"
+            th:onclick="movePage([[${requestURI}]], [[${params.makeQueryString(info.firstPage - 1)}]])">
+            <a aria-label="Previous" href="javascript:void(0)"><span aria-hidden="true">&lsaquo;</span></a>
+        </li>
+
+        <li th:class="${pageNo == params.currentPageNo} ? 'active'"
+            th:each="pageNo : *{#numbers.sequence(firstPage, lastPage)}">
+            <a href="javascript:void(0)"
+               th:onclick="movePage([[${requestURI}]], [[${params.makeQueryString(pageNo)}]])"
+               th:text="${pageNo}"></a>
+        </li>
+
+        <li th:if="*{hasNextPage == true}"
+            th:onclick="movePage([[${requestURI}]], [[${params.makeQueryString(info.lastPage + 1)}]])">
+            <a aria-label="Next" href="javascript:void(0)"><span aria-hidden="true">&rsaquo;</span></a>
+        </li>
+
+        <li th:if="*{hasNextPage == true}"
+            th:onclick="movePage([[${requestURI}]], [[${params.makeQueryString(info.totalPageCount)}]])">
+            <a aria-label="Next" href="javascript:void(0)"><span aria-hidden="true">&raquo;</span></a>
+        </li>
+    </ul>
+</nav>
+
+</html>
