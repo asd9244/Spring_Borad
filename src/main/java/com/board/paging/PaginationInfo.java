@@ -12,6 +12,7 @@ public class PaginationInfo {
     private boolean hasPreviousPage; // 이전 페이지가 존재하는 지를 판단하기 위한 변수
     private boolean hasNextPage; // 다음 페이지가 존재하는 지를 구분하는 용도
 
+
     public PaginationInfo(Criteria criteria) { //  잘못된 값이 들어왔을 때, 기본값 지정, 페이징 번호 계산
         if (criteria.getCurrentPageNo() < 1) {
             criteria.setCurrentPageNo(1);
@@ -65,6 +66,7 @@ public class PaginationInfo {
 
         /* 다음 페이지 존재 여부 */
         hasNextPage = (lastPage * criteria.getRecordsPerPage()) < totalRecordCount;
+
     }
 
     public Criteria getCriteria() {

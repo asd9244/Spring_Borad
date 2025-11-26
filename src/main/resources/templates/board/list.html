@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorator="~{board/layout/basic}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="ko" layout:decorate="~{board/layout/basic}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <th:block layout:fragment="title">
     <title>This page is a list page</title>
@@ -45,11 +45,12 @@
         </div>
 
         <th:block layout:fragment="paging">
-            <nav th:replace="~{board/fragments/common :: pagination}"></nav>
+            <nav th:replace="board/fragments/common :: pagination"></nav>
         </th:block>
 
     </div>
 </th:block>
+
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         /*<![CDATA[*/
