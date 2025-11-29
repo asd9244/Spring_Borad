@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 @PropertySource("classpath:/application.properties") // 해당 클래스에서 참조할 properties 파일 위치 지정
 public class DBConfiguration {
 
-    @Autowired // ApplicationContext == 'IoC컨테이너의 권한'을 이 클레스에 적용.
+    @Autowired // ApplicationContext == 'IoC컨테이너의 권한'을 이 클레스에 적용.(spring에서 가장 높은 권한)
     private ApplicationContext applicationContext; // 권한: Bean검색 및 조작, 환경, 리소스 접근(Properties, xml)
 
     @Bean

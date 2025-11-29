@@ -12,7 +12,6 @@
  -->
 
 <!-- <th:block>: 타임리프 전용 컨테이너, HTML태그를 생성하지 않음 -->
-<!-- <타임리프 템플릿> == title, content, script 3가지 파트로 구성됨. <th:block>으로 나눠져있음.-->
 <th:block layout:fragment="title">
     <title>This page is a write page</title>
 </th:block>
@@ -63,8 +62,9 @@
                 </div>
             </div>
 
-            <div class="btn_wrap text-center">
-                <a class="btn btn-default waves-effect waves-light" th:href="@{/board/list.do}">뒤로가기</a>
+            <div class="btn_wrap text-center" th:object="${params}">
+                <a class="btn btn-default waves-effect waves-light"
+                   th:href="|@{/board/list.do}*{makeQueryString(currentPageNo)}|">뒤로가기</a>
                 <button class="btn btn-primary waves-effect waves-light" type="submit">저장하기</button>
             </div>
 
@@ -91,6 +91,19 @@
 
             if (result == false) {
                 return false;
+            }
+
+            var idx = /*[[ ${board.idx} ]]*/ null;
+            if (isEmpty(idx) == false) {
+                var queryString = /*[[ ${params.makeQueryString(params.currentPageNo)} ]]*/ null;
+
+                /*[- 쿼리 스트링을 오브젝트 형태로 변환 -]*/
+                queryString = new URLSearchParams(queryString);
+                queryString.forEach(function (value, key) {
+                    if (isEmpty(value) == false) {
+                        $(form).append('<input type="hidden" name="' + key + '" value="' + value + '" />');
+                    }
+                });
             }
         }
 

@@ -1,10 +1,12 @@
 package com.board.util;
 
 import com.board.constant.Method;
+import com.board.paging.Criteria;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Controller
@@ -21,5 +23,18 @@ public class UiUtils {
         model.addAttribute("params", params);
 
         return "utils/message-redirect";
+    }
+
+    // Criteria 클래스의 모든 멤버 변수(이전 페이지 정보)를 Map에 Key, Value 형태 리턴
+    public Map<String, Object> getPagingParams(Criteria criteria) {
+        // GET 방식이 아닌 POST 방식의 처리에서만 사용
+        Map<String, Object> params = new LinkedHashMap<>();
+        params.put("currentPageNo", criteria.getCurrentPageNo());
+        params.put("recordsPerPage", criteria.getRecordsPerPage());
+        params.put("pageSize", criteria.getPageSize());
+        params.put("searchType", criteria.getSearchType());
+        params.put("searchKeyword", criteria.getSearchKeyword());
+
+        return params;
     }
 }

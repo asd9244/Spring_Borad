@@ -50,13 +50,15 @@
     </div>
     </form>
 
-    <div class="btn_wrap text-center">
+    <div class="btn_wrap text-center" th:object="${params}">
         <!--뒤로가기: 파라미터 없음, 게시글의 마지막 페이지로 이동.-->
-        <a class="btn btn-default waves-effect waves-light" th:href="@{/board/list.do}">뒤로가기</a>
+        <a class="btn btn-default waves-effect waves-light"
+           th:href="|@{/board/list.do}*{makeQueryString(currentPageNo)}|">뒤로가기</a>
         <!--수정하기: 파라미터(idx), 게시글 작성 페이지로 이동, 신규작성과 다르게, 입력받은 idx와 일치하는 게시글 정보를 화면에 출력-->
-        <a class="btn btn-primary waves-effect waves-light" th:href="@{/board/write.do( idx=${board.idx} )}">수정하기</a>
+        <a class="btn btn-primary waves-effect waves-light"
+           th:href="|@{/board/write.do}*{makeQueryString(currentPageNo)}&idx=${board.idx}|">수정하기</a>
         <!--삭제하기: 파라미터(idx), 게시글 삭제 URL 호출, th:onclick 속성을 통해 idx를 인자로 지정.-->
-        <button class="btn btn-danger waves-effect waves-light" th:onclick="|deleteBoard('${board.idx}', '')|"
+        <button class="btn btn-danger waves-effect waves-light" th:onclick="deleteBoard([[ ${board.idx} ]], [[ *{makeQueryString(currentPageNo)} ]])"
                 type="button">삭제하기
         </button>
     </div>
@@ -108,17 +110,24 @@
     /*<![CDATA[*/
     function deleteBoard(idx, queryString) { // (글번호, 다시 돌아갈 페이지/조건 정보)
         if (confirm(idx + "번 게시글을 삭제할까요?")) { // confirm == alert == 삭제여부 확인 후 true/false반환.
-            var uri = /*[[@{/board/delete.do}]]*/ null;
-            var html = '';
+            var uri = /*[[ @{/board/delete.do} ]]*/ null; // 주석안에 타임리프형식을 넣어서, 서버off일때 인식 못하게 막고, 서버on일때는 주석안의 주소를 uri에 할당하는 코드
+            var html = "";
+
             html += '<form name="dataForm" action="' + uri + '" method="post">';
             html += '<input type="hidden" name="idx" value="' + idx + '" />';
+
+            /* [- 쿼리 스트링을 오브젝트 형태로 변환 -] */
+            // URLSearchParams함수: 쿼리 스트링에 포함된 모든 파라미터들을 객체화하는 데 사용
+            //여기서는 객체화된 queryString에 포함된 파라미터를 순환해서 값이 존재하는 파라미터만 hidden 타입으로 폼에 추가
             queryString = new URLSearchParams(queryString);
             queryString.forEach(function (value, key) {
                 if (isEmpty(value) == false) {
                     html += '<input type="hidden" name="' + key + '" value="' + value + '" />';
                 }
             });
+
             html += '</form>';
+
             $("body").append(html); // HTML의 <body> 태그 안에 html 변수에 담긴 폼을 추가
             document.dataForm.submit(); //<body>에 추가된 폼을 찾아 컨트롤러로 서브밋
         }

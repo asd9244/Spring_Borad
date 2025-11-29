@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{board/layout/basic}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
+
 <th:block layout:fragment="title">
     <title>This page is a list page</title>
 </th:block>
+
+<!-- basic layout의 "search"자리에 들어갈 조각이라는 선언 -->
 <th:block layout:fragment="search">
-    <form action="#" class="searchform js_toggle active pull-right" id="searchform-header">
-        <input class="input-search" placeholder="Search..." type="search">
-        <button class="mdi mdi-magnify button-search" type="submit">
-            <i aria-hidden="true" class="fa fa-search"></i>
-        </button>
-    </form>
+    <!--  common.html의 "search"조각이 들어올 자리 -->
+    <div th:replace="board/fragments/common :: search"></div>
 </th:block>
+
 <th:block layout:fragment="content">
     <div class="table-responsive clearfix">
         <table class="table table-hover">
@@ -24,11 +24,13 @@
                 <th>조회 수</th>
             </tr>
             </thead>
+
             <tbody>
             <tr th:each="row : ${boardList}" th:if="${not #lists.isEmpty(boardList)}">
                 <td scope="row" th:text="${#strings.equals( row.noticeYn, 'Y' ) ? '공지' : row.idx}"></td>
                 <td class="text-left">
-                    <a th:href="@{/board/view.do(idx=${row.idx})}" th:text="${row.title}"></a>
+                    <a th:href="|@{/board/view.do}${params.makeQueryString(params.currentPageNo)}&idx=${row.idx}|"
+                       th:text="${row.title}"></a>
                 </td>
                 <td th:text="${row.writer}"></td>
                 <td th:text="${#temporals.format( row.insertTime, 'yyyy-MM-dd' )}"></td>
@@ -57,6 +59,27 @@
 
         function movePage(uri, queryString) {
             location.href = uri + queryString;
+        }
+
+        function searchBoard(form) {
+            /*[- 웹사이트 상단(헤더)에 있는 '메인 검색창'을 이용할 때 -]*/
+            if (isEmpty(form) == true) {
+                var searchKeyword = document.getElementById("mainSearchKeyword");
+                if (isEmpty(searchKeyword.value) == true) {
+                    alert("키워드를 입력해 주세요");
+                    searchKeyword.focus(); // focus(): HTML요소. 입력창으로 입력커서를 갖다 댐.
+                    return false;
+                }
+                form = document.getElementById("searchForm");
+                form.searchKeyword.value = searchKeyword.value;
+                form.submit();
+            }
+            /*[- 드롭다운을 통해 검색이 이루어졌을 때 실행 -]*/
+            if (isEmpty(form.searchKeyword.value) == true) {
+                alert("키워드를 입력해주세요.");
+                form.searchKeyword.focus();
+                return false;
+            }
         }
 
         /*]]>*/

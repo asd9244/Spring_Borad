@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
-<nav th:fragment="pagination"
+<nav aria-label="Page navigation"
+     class="text-center"
+     th:fragment="pagination"
      th:if="${params != null and params.paginationInfo.totalRecordCount > 0}"
      th:object="${params.paginationInfo}"
-     th:with="info=${params.paginationInfo}"
-     aria-label="Page navigation"
-     class="text-center">
+     th:with="info=${params.paginationInfo}">
     <ul class="pagination">
 
         <li th:if="*{hasPreviousPage == true}"
@@ -18,7 +18,7 @@
             th:onclick="movePage([[${requestURI}]], [[${params.makeQueryString(info.firstPage - 1)}]])">
             <a aria-label="Previous" href="javascript:void(0)"><span aria-hidden="true">&lsaquo;</span></a>
         </li>
-
+        <!-- 현재 보고있는 페이지 넘버에 강조 표시 -->
         <li th:class="${pageNo == params.currentPageNo} ? 'active'"
             th:each="pageNo : *{#numbers.sequence(firstPage, lastPage)}">
             <a href="javascript:void(0)"
@@ -37,5 +37,55 @@
         </li>
     </ul>
 </nav>
+
+<!-- 검색기능 구현 -->
+<!-- list.html의 "search"자리에 들어갈 조각 -->
+<div class="input-group" id="adv-search" th:fragment="search">
+    <input class="form-control" id="mainSearchKeyword" placeholder="키워드를 입력해 주세요." th:value="${params.searchKeyword}"
+           type="text"/>
+    <div class="input-group-btn">
+        <div class="btn-group" role="group">
+            <div class="dropdown dropdown-lg">
+                <button aria-expanded="false" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        type="button"><span class="caret"></span></button>
+                <div class="dropdown-menu dropdown-menu-right" role="menu">
+                    <form class="form-horizontal" id="searchForm" method="get" onsubmit="return searchBoard(this)"
+                          role="form" th:action="@{/board/list.do}">
+                        <!-- 현재 페이지번호, 페이지당 출력할 데이터 개수, 페이지 하단에 출력할 페이지 개수, Hidden파라미터  -->
+                        <input name="currentPageNo" type="hidden" value="1"/>
+                        <input name="recordsPerPage" th:value="${params.recordsPerPage}" type="hidden"/>
+                        <input name="pageSize" th:value="${params.pageSize}" type="hidden"/>
+
+                        <div class="form-group">
+                            <label for="filter">검색 유형</label>
+                            <select class="form-control" name="searchType">
+                                <option th:selected="${#strings.isEmpty( params.searchType )}" value="">전체</option>
+                                <option th:selected="${#strings.equals( params.searchType, 'title' )}" value="title">
+                                    제목
+                                </option>
+                                <option th:selected="${#strings.equals( params.searchType, 'content' )}"
+                                        value="content">내용
+                                </option>
+                                <option th:selected="${#strings.equals( params.searchType, 'writer' )}" value="writer">
+                                    작성자
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="contain">키워드</label>
+                            <input class="form-control" name="searchKeyword" th:value="${params.searchKeyword}"
+                                   type="text"/>
+                        </div>
+                        <button class="btn btn-primary" type="submit"><span aria-hidden="true"
+                                                                            class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="searchBoard(null)" type="button"><span
+                    aria-hidden="true" class="glyphicon glyphicon-search"></span></button>
+        </div>
+    </div>
+</div>
 
 </html>
