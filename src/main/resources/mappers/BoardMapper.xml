@@ -42,6 +42,7 @@
         , NULL
         )
     </insert>
+
     <select id="selectBoardDetail" parameterType="long" resultType="BoardDTO">
         SELECT
         <include refid="boardColumns"/>
@@ -92,5 +93,12 @@
         WHERE delete_yn = 'N'
         <include refid="CommonMapper.search"/>
     </select>
+
+    <!-- 조회수 증가 -->
+    <update id="viewCntUP" parameterType="BoardDTO">
+        UPDATE board
+        SET view_cnt = view_cnt + 1
+        WHERE idx = #{idx}
+    </update>
 
 </mapper>

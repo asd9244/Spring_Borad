@@ -28,4 +28,7 @@ public interface BoardMapper {
     // **검색 조건(Criteria)**에 맞는 전체 게시글의 개수를 조회하여 페이징 계산에 활용합니다.
     public int selectBoardTotalCount(BoardDTO params);
 
+    // 게시글의 조회수를 증가시킨다.
+    public int viewCntUP(BoardDTO params);
+
 }

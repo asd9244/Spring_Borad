@@ -12,7 +12,7 @@ import java.util.List;
 @Service // 비즈니스 로직을 담당하는 서비스 클래스 선언
 public class BoardServiceImpl implements BoardService {
 
-    @Autowired // DM와 연결할 수 있는 boardMapper 의존성 주입
+    @Autowired // DB와 연결할 수 있는 boardMapper 의존성 주입
     private BoardMapper boardMapper; // boardMapper를 통해 DM에 명령할 수 있다.
 
     // 게시글 생성 및 수정 처리
@@ -27,6 +27,11 @@ public class BoardServiceImpl implements BoardService {
         }
         // 작업이 성공하면 true(1), 실패하면 false(0) 반환.
         return (queryResult == 1) ? true : false;
+    }
+
+    @Override
+    public void viewCntUP(BoardDTO params) {
+        boardMapper.viewCntUP(params);
     }
 
     // 게시글 하나 조회

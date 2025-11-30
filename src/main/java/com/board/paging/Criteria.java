@@ -18,18 +18,20 @@ public class Criteria {
     }
 
     public String makeQueryString(int pageNo) {
-        UriComponents uriComponents = UriComponentsBuilder.newInstance()
-                .queryParam("currentPageNo", pageNo)
+        UriComponents uriComponents = UriComponentsBuilder.newInstance() // UriComponentsBuilder: spring 유틸 클레스: builder 객체 생성.
+                .queryParam("currentPageNo", pageNo) // queryParam(name, value): ?key=value 형태의 파라미터를 추가
                 .queryParam("recordsPerPage", recordsPerPage)
                 .queryParam("pageSize", pageSize)
                 .queryParam("searchType", searchType)
                 .queryParam("searchKeyword", searchKeyword)
+                // .build()메서드: 설정한 파라미터들로 UriComponents 객체를 완성.
                 .build()
-                .encode();
+                .encode(); // 한글이나 특수문자가 깨지지 않도록 인코딩(UTF-8 등) 처리.
 
-        return uriComponents.toUriString();
+        return uriComponents.toUriString(); // 이 메서드를 실행하면 ?currentPageNo=2&recordsPerPage=10&searchType=title... 같은 문자열이 생성됨.
     }
 
+    // MySQL의 LIMIT 구문에서 데이터를 어디서부터 가져올지 결정하는 **시작점(Offset)**을 계산
     public int getStartPage() { // MySQL에서 LIMIT 구문의 앞부분에 사용되는 메서드
         return (currentPageNo - 1) * recordsPerPage;
     }

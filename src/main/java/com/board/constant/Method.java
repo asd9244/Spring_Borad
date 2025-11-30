@@ -6,4 +6,11 @@ public enum Method {
     // enum이면 잘못 실행될 경우 컴파일 단계에서 에러가 발생해서 타입 안정성이 확보됨.
     // 일반적으로 사용되는 HTTP 메서드 5종
     GET, POST, PUT, PATCH, DELETE;
+
+// POST: 자원(Resource)을 생성
+// GET: 자원(Resource)을 조회
+// PUT: 자원(Resource)을 수정
+// PATCH: 자원(Resource)을 수정
+//DELETE: 자원(Resource)을 삭제
+
 }

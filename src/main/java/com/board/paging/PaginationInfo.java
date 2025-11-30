@@ -26,16 +26,6 @@ public class PaginationInfo {
         this.criteria = criteria;
     }
 
-    // 파라미터로 넘어온 전체 데이터 개수를 PaginationInfo 클래스의 전체 데이터 개수에 저장
-    // 전체 데이터 개수가 1개 이상이면 페이지 번호를 계산하는 calculation 메서드 실행
-    public void setTotalRecordCount(int totalRecordCount) {
-        this.totalRecordCount = totalRecordCount;
-
-        if (totalRecordCount > 0) {
-            calculation();
-        }
-    }
-
     private void calculation() {
         /* 전체 페이지 수 (현재 페이지 번호가 전체 페이지 수보다 크면 현재 페이지 번호에 전체 페이지 수를 저장) */
         // ( (전체 데이터 개수 - 1) / 페이지당 출력할 데이터 개수 ) + 1을 통해 전체 페이지 개수 산출
@@ -46,6 +36,7 @@ public class PaginationInfo {
 
         /* 페이지 리스트의 첫 페이지 번호 */
         // ( (현재 페이지 번호 - 1) / 화면 하단의 페이지 개수 ) * 화면 하단의 페이지 개수 + 1을 통해 가장 좌측의 페이지 번호 산출
+        // ex) (currentPageNo(13) -1) / pageSize(10) = 1, 1 * pageSize(10) = 10, 10 + 1 = firstPage(11)
         firstPage = ((criteria.getCurrentPageNo() - 1) / criteria.getPageSize()) * criteria.getPageSize() + 1;
 
         /* 페이지 리스트의 마지막 페이지 번호 (마지막 페이지가 전체 페이지 수보다 크면 마지막 페이지에 전체 페이지 수를 저장) */
@@ -79,6 +70,16 @@ public class PaginationInfo {
 
     public int getTotalRecordCount() {
         return totalRecordCount;
+    }
+
+    // 파라미터로 넘어온 전체 데이터 개수를 PaginationInfo 클래스의 전체 데이터 개수에 저장
+    // 전체 데이터 개수가 1개 이상이면 페이지 번호를 계산하는 calculation 메서드 실행
+    public void setTotalRecordCount(int totalRecordCount) {
+        this.totalRecordCount = totalRecordCount;
+
+        if (totalRecordCount > 0) {
+            calculation();
+        }
     }
 
     public int getTotalPageCount() {

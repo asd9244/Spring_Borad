@@ -95,7 +95,8 @@
 
             var idx = /*[[ ${board.idx} ]]*/ null;
             if (isEmpty(idx) == false) {
-                var queryString = /*[[ ${params.makeQueryString(params.currentPageNo)} ]]*/ null;
+                var queryString = /*[[ ${params.makeQueryString(params.currentPageNo)} ]]*/ null; // JS 인라인 표현식인데, /**/주석과 대괄호가 붙어있어야 작동한다.
+                // 떨어져있으면 완전히 주석으로 인식해서 대괄호 안의 코드를 무시해버림.
 
                 /*[- 쿼리 스트링을 오브젝트 형태로 변환 -]*/
                 queryString = new URLSearchParams(queryString);

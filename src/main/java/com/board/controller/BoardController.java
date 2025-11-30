@@ -75,8 +75,8 @@ public class BoardController extends UiUtils {
         if (idx == null) { // 입력창에 게시글 번호조차 없다면, 메시지팝업, 리스트로 되돌아감.
             return showMessageWithRedirect("올바르지 않은 접근입니다.", "/board/list.do", Method.GET, null, model);
         }
-
         BoardDTO board = boardService.getBoardDetail(idx); // 파라미터로 입력받은 게시글 번호로 게시글정보 가져오기.
+        boardService.viewCntUP(board);
         if (board == null || "Y".equals(board.getDeleteYn())) { // 받아온 idx로 게시글 조회해서 없거나, 삭제되었으면 리스트로
             // 입력창에 게시글 번호는 맞게 입력했지만, 이미 삭제되었다면, 메시지팝업, 리스트로 되돌아감.
             return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/list.do", Method.GET, null, model);
