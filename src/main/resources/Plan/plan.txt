@@ -1,0 +1,21 @@
+# 기본 회원 시스템
+
+✔ 회원가입
+✔ 로그인
+✔ 로그아웃
+✔ 비밀번호 암호화(BCrypt)
+✔ 본인 글만 수정/삭제
+✔ 관리자 계정 1개 존재
+✔ 관리자만 공지 등록 가능
+✔ 회원 전용 페이지(내 정보 보기 정도)
+✔ 세션 기반 로그인 유지
+
+-- Member 테이블 설계
+member
+(
+    member_id      VARCHAR(50)  PRIMARY KEY,   -- 로그인 ID
+    password       VARCHAR(200) NOT NULL,      -- BCrypt 암호화 PW
+    name           VARCHAR(50)  NOT NULL,      -- 사용자 이름 or 닉네임
+    role           ENUM('USER','ADMIN') NOT NULL DEFAULT 'USER',
+    join_date      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
