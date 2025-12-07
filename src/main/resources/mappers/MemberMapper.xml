@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+1. XML Mapper: 마이바티스에서 SQL 쿼리문이 정의되어 있는 파일
+2. <mapper> → Mapper 인터페이스의 메서드 매핑을 위한 지정하는 속성
+3. <sql> → SQL을 정의하기 위한 태그, 태그의 시작과 끝 사이에는 쿼리문과 관련된 여러 태그를 작성
+4. <include> → <sql> 태그에 정의한 boardColumns SQL에 사용되는 속성
+5. paremeterType → 파라미터 타입 속성 지정
+6. resultType → 쿼리의 실행 결과 매핑 타입 지정
+7. Parameter expression → #{}                               -->
+
+<mapper namespace="com.board.mapper.MemberMapper">
+    <sql id="memberColumns">
+        member_id
+        , password
+        , name
+        , email
+        , phone
+        , role
+        , status
+        , join_date
+        , last_login
+        , update_time
+    </sql>
+
+    <!--      // CREATE 회원등록, 작업 성공 시 생성된 행의 수(1)를 반환한다.  -->
+    <insert id="insertMember" parameterType="MemberDTO">
+        INSERT INTO member (
+        <include refid="memberColumns"/>
+        ) values (
+        #{memberId}
+        , #{password}
+        , #{name}
+        , #{email}
+        , #{phone}
+        , IFNULL(#{role}, 'USER')
+        , IFNULL(#{status}, 'ACTIVE')
+        , NOW()
+        , NULL
+        , NULL
+        )
+    </insert>
+
+    <!--    // UPDATE 회원정보, 작업 성공 시 변경된 행의 수(1)를 반환한다.-->
+    <update id="updateMember" parameterType="MemberDTO">
+        UPDATE member
+        SET update_time = NOW()
+          , password    = #{password}
+          , name        = #{name}
+          , email       = #{email}
+          , phone       = #{phone}
+        WHERE member_id = #{memberId}
+    </update>
+
+    <!--        //SELECT 회원조회, 회원 1명의 상세정보를 조회한다.-->
+    <select id="selectMemberDetail" parameterType="String" resultType="MemberDTO">
+        SELECT
+        <include refid="memberColumns"/>
+        FROM member
+        WHERE status = 'ACTIVE'
+        AND
+        member_id = #{memberId}
+    </select>
+
+    <!--    // SELECT 전체회원조회, 회원 전체의 상세정보를 조회한다. -->
+    <select id="selectMemberList" parameterType="MemberDTO" resultType="MemberDTO">
+        SELECT
+        <include refid="memberColumns"/>
+        FROM member
+        WHERE status = 'ACTIVE'
+        ORDER BY join_date ASC
+    </select>
+
+    <!--    // UPDATE 회원탈퇴, 회원의 status를 inactive로 변경한다. 작업 성공 시 행의 수(1)을 반환한다.-->
+    <update id="deleteMember" parameterType="String">
+        update member
+        set status      = 'INACTIVE'
+          , update_time = NOW()
+        where member_id = #{memberId}
+    </update>
+
+    <!--    // SELECT 중복회원확인, 0보다 큰 수가 반환되면, 아이디 중복.-->
+    <select id="selectMemberIdCheck" parameterType="String">
+        select count(*)
+        from member
+        where member_id = #{memberId}
+    </select>
+
+    <!--    // SELECT 중복이메일확인, 0보다 큰 수가 반환되면, 아이디 중복.-->
+    <select id="selectEmailCheck" parameterType="String">
+        select count(*)
+        from member
+        where email = #{email}
+    </select>
+
+    <!--    // SELECT 계정상태조회, 로그인 할 때, status가 inactive면 로그인 중단.-->
+    <select id="selectMemberStatus" parameterType="String">
+        select status
+        from member
+        where member_id = #{memberId}
+    </select>
+
+    <!--    // SELECT 로그인기능, 아이디로 비밀번호를 조회해서, 일치하는지 확인. 일치하면 1 반환.-->
+    <select id="selectMemberById" parameterType="String" resultType="MemberDTO">
+        SELECT
+        <include refid="memberColumns"/>
+        FROM member
+        WHERE member_id = #{memberId}
+        AND status = 'ACTIVE'
+    </select>
+
+    <!--    // UPDATE 마지막접속시간, 로그인 할 때 접속시간 Update-->
+    <update id="updateLastLogin" parameterType="MemberDTO">
+        update member
+        set last_login = now()
+        where member_id = #{memberId}
+    </update>
+
+</mapper>
