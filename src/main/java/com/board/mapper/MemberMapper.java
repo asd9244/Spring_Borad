@@ -26,10 +26,10 @@ public interface MemberMapper {
     public int deleteMember(String memberId);
 
     // SELECT 중복회원확인, 0보다 큰 수가 반환되면, 아이디 중복.
-    public int selectMemberIdCheck(String memberId);
+    public int selectIdOverlapCheck(String memberId);
 
     // SELECT 중복이메일확인, 0보다 큰 수가 반환되면, 아이디 중복.
-    public int selectEmailCheck(String email);
+    public int selectOverlapEmailCheck(String email);
 
     // SELECT 계정상태조회, 로그인 할 때, status가 inactive면 로그인 중단.
     public String selectMemberStatus(String memberId);
