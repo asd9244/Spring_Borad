@@ -1,5 +1,4 @@
-use
-    board;
+use board;
 
 select *
 from member;
