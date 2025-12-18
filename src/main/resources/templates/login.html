@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+
+    <!--
+    최소한의 기본 스타일
+    (나중에 layout / css로 분리 가능)
+    -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .login-container {
+            width: 360px;
+            margin: 120px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0d6efd;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0b5ed7;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <h2>로그인기능구현중</h2>
+
+    <!--
+    로그인 실패 시 메시지 출력
+    - LoginController에서
+      model.addAttribute("error", "...") 전달
+    -->
+    <div th:if="${error != null}" class="error-message">
+        <span th:text="${error}">에러 메시지</span>
+    </div>
+
+    <!--
+    로그인 폼
+    - action: /login.do
+    - method: POST
+    -->
+    <form th:action="@{/login.do}" method="post">
+
+        <div class="form-group">
+            <label for="memberId">아이디</label>
+            <!--
+            name="memberId"
+            → MemberDTO.memberId 로 바인딩
+            -->
+            <input type="text"
+                   id="memberId"
+                   name="memberId"
+                   placeholder="아이디를 입력하세요"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <!--
+            name="password"
+            → MemberDTO.password 로 바인딩
+            -->
+            <input type="password"
+                   id="password"
+                   name="password"
+                   placeholder="비밀번호를 입력하세요"
+                   required>
+        </div>
+
+        <button type="submit">로그인</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

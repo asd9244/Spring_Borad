@@ -77,6 +77,8 @@ public class MemberServiceImpl implements MemberService {
             // 2. 평문 비밀번호를 입력하면, 계정 비밀번호로 DB에 저장된 한 개의 해시값과 비교검증 시작.
             // 3. 입력받은 비밀번호가 저장된 해시값을 만들 수 있는 비밀번호인지 검증.
             // 4. 가능하면 로그인 성공, 불가능하면 로그인 실패.
+            System.out.println("[" + params.getPassword() + "]");
+
             return null;
         }
 

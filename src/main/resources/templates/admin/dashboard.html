@@ -1,0 +1,47 @@
+<!--
+templates/admin/dashboard.html
+-->
+
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 대시보드</title>
+</head>
+<body>
+
+<!-- 관리자 상단 영역 -->
+<h2>관리자 대시보드</h2>
+
+<p>
+    관리자 계정 :
+    <strong th:text="${admin.name}">관리자</strong>
+    (<span th:text="${admin.memberId}">admin</span>)
+</p>
+
+<hr>
+
+<!-- 관리자 메뉴 -->
+<ul>
+    <li>
+        <a th:href="@{/board/list.do}">
+            게시판 관리
+        </a>
+    </li>
+
+    <li>
+        <a th:href="@{/admin/members.do}">
+            회원 관리
+        </a>
+    </li>
+
+    <li>
+        <form th:action="@{/logout.do}" method="post">
+            <button type="submit">로그아웃</button>
+        </form>
+    </li>
+</ul>
+
+</body>
+</html>

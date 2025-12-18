@@ -1,5 +1,16 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<!--
+[기존 header.html 구조를 유지한 상태에서 로그인/로그아웃 UI 추가]
+- 핵심 원칙
+  1) 기존 main-head fragment 절대 깨지지 않게 유지
+  2) <head> 는 head 역할만 수행
+  3) 로그인/로그아웃 UI는 "body용 fragment"로 분리
+-->
+
 <head th:fragment="main-head">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,11 +18,63 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <!-- 페이지별 title -->
     <th:block layout:fragment="title"></th:block>
 
+    <!-- 공통 CSS -->
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <link rel="stylesheet" th:href="@{/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css}" />
 
+    <!-- 페이지별 추가 CSS -->
     <th:block layout:fragment="add-css"></th:block>
 </head>
+
+<body>
+
+<!--
+[공통 상단 영역 fragment]
+- 실제 로그인/로그아웃 UI는 여기서 처리
+-->
+<th:block th:fragment="main-header">
+
+    <header class="header">
+
+        <!-- 비로그인 상태 -->
+        <div th:if="${session.LOGIN_MEMBER == null}" class="header-auth">
+            <a th:href="@{/login.do}" class="btn-login">
+                로그인
+            </a>
+        </div>
+
+        <!-- 로그인 상태 -->
+        <div th:if="${session.LOGIN_MEMBER != null}" class="header-auth">
+
+            <!-- 사용자 이름 -->
+            <span class="user-name">
+                <strong th:text="${session.LOGIN_MEMBER.name}">사용자</strong> 님
+            </span>
+
+            <!-- 관리자 메뉴 (ADMIN만 노출) -->
+            <a th:if="${session.LOGIN_MEMBER.role == 'ADMIN'}"
+               th:href="@{/admin/dashboard.do}"
+               class="btn-admin">
+                관리자
+            </a>
+
+            <!-- 로그아웃 -->
+            <form th:action="@{/logout.do}"
+                  method="post"
+                  class="logout-form">
+                <button type="submit" class="btn-logout">
+                    로그아웃
+                </button>
+            </form>
+
+        </div>
+
+    </header>
+
+</th:block>
+
+</body>
 </html>
