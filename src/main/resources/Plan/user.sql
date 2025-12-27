@@ -26,6 +26,20 @@ values ('admin',
         'admin@exampl.com',
         'ADMIN');
       
+            -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트            -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트            -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트
+      -- vs code git hub 연동 테스트
       -- vs code git hub 연동 테스트
       -- vs code git hub 연동 테스트
       
