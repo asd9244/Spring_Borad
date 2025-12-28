@@ -44,6 +44,22 @@ public class LoginController {
             return "redirect:/admin/dashboard.do";
         }
 
+            // 1. 세션에서 "targetUrl" 데이터 조회
+            // 세션 객체(Map 구조)에 저장된 값이 Object 타입이므로, String으로 형변환(Casting)하여 가져옵니다.
+            String targetUrl = (String) newSession.getAttribute("targetUrl");
+
+            // 2. 데이터 존재 여부 확인
+            if (targetUrl != null) { 
+                // 3. 데이터 삭제 (일회성 사용)
+                // 사용한 URL 정보는 세션 메모리에서 즉시 제거하여, 이후 불필요한 리다이렉트를 방지합니다.
+                newSession.removeAttribute("targetUrl"); 
+                
+                // 4. 저장된 URL로 리다이렉트
+                // "redirect:" 접두사를 반환하면, Spring의 ViewResolver가 이를 인식하여 해당 주소로 리다이렉트 응답을 보냅니다.
+                return "redirect:" + targetUrl; 
+            }
+
+        // 5. 저장된 데이터가 없으면 기본 페이지로 이동
         // redirect요청 시, model객체는 메시지만 전달하고 사라진다.
         // 서버메모리에 저장된 session객체는 로그인 정보를 담은 상태로 남는다.
         return "redirect:/board/list.do"; // 로그인 성공, 게시판으로 이동.
