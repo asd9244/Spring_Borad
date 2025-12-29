@@ -1,126 +1,99 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <title>Login</title>
 
-<head>
-    <meta charset="UTF-8">
-    <title>로그인</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      th:href="@{/plugin/bootstrap/css/bootstrap.min.css}"
+    />
+    <link
+      rel="stylesheet"
+      th:href="@{/fonts/font-awesome/css/font-awesome.min.css}"
+    />
+  </head>
 
-    <!--
-    최소한의 기본 스타일
-    (나중에 layout / css로 분리 가능)
-    -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
+  <body>
+    <div id="wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4">
+            <div class="box-content margin-top-100">
+              <h2 class="text-center margin-bottom-30">LOGIN</h2>
 
-        .login-container {
-            width: 360px;
-            margin: 120px auto;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
+              <div
+                th:if="${error != null}"
+                class="alert alert-danger text-center"
+              >
+                <span th:text="${error}"></span>
+              </div>
 
-        h2 {
-            text-align: center;
-            margin-bottom: 25px;
-        }
+              <form th:action="@{/login.do}" method="post">
+                <div class="form-group">
+                  <label for="memberId">아이디</label>
+                  <input
+                    type="text"
+                    id="memberId"
+                    name="memberId"
+                    class="form-control"
+                    placeholder="아이디를 입력하세요"
+                    required
+                  />
+                </div>
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+                <div class="form-group">
+                  <label for="password">비밀번호</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="비밀번호를 입력하세요"
+                    required
+                  />
+                </div>
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+                <div class="form-group text-right text-muted">
+                  <a href="#" class="text-muted">아이디 찾기</a>
+                  <span class="bar">|</span>
+                  <a href="#" class="text-muted">비밀번호 찾기</a>
+                </div>
 
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
+                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                  로그인
+                </button>
+              </form>
 
-        .error-message {
-            color: red;
-            margin-bottom: 15px;
-            text-align: center;
-        }
+              <hr class="margin-top-20 margin-bottom-20" />
 
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #0d6efd;
-            color: #ffffff;
-            border: none;
-            cursor: pointer;
-        }
+              <div class="text-center">
+                <button
+                  type="button"
+                  class="btn btn-google-plus btn-social-with-text btn-block"
+                >
+                  <i class="ico fa fa-google-plus"></i> Google 계정으로 로그인
+                </button>
 
-        button:hover {
-            background-color: #0b5ed7;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="login-container">
-
-    <h2>로그인기능구현중</h2>
-
-    <!--
-    로그인 실패 시 메시지 출력
-    - LoginController에서
-      model.addAttribute("error", "...") 전달
-    -->
-    <div th:if="${error != null}" class="error-message">
-        <span th:text="${error}">에러 메시지</span>
+                <a
+                  th:href="@{/members/add.do}"
+                  class="btn btn-default btn-bordered btn-block margin-top-10"
+                >
+                  회원가입
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!--
-    로그인 폼
-    - action: /login.do
-    - method: POST
-    -->
-    <form th:action="@{/login.do}" method="post">
-
-        <div class="form-group">
-            <label for="memberId">아이디</label>
-            <!--
-            name="memberId"
-            → MemberDTO.memberId 로 바인딩
-            -->
-            <input type="text"
-                   id="memberId"
-                   name="memberId"
-                   placeholder="아이디를 입력하세요"
-                   required>
-        </div>
-
-        <div class="form-group">
-            <label for="password">비밀번호</label>
-            <!--
-            name="password"
-            → MemberDTO.password 로 바인딩
-            -->
-            <input type="password"
-                   id="password"
-                   name="password"
-                   placeholder="비밀번호를 입력하세요"
-                   required>
-        </div>
-
-        <button type="submit">로그인</button>
-
-    </form>
-
-</div>
-
-</body>
+    <script th:src="@{/scripts/jquery.min.js}"></script>
+    <script th:src="@{/plugin/bootstrap/js/bootstrap.min.js}"></script>
+  </body>
 </html>

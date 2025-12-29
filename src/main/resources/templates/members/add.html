@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>회원가입</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link
+      rel="stylesheet"
+      th:href="@{/plugin/bootstrap/css/bootstrap.min.css}"
+    />
+    <link
+      rel="stylesheet"
+      th:href="@{/fonts/font-awesome/css/font-awesome.min.css}"
+    />
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="box-content margin-top-50">
+              <h2 class="text-center margin-bottom-30">회원가입</h2>
+
+              <form
+                th:action="@{/members/save.do}"
+                method="post"
+                onsubmit="return checkValidation()"
+              >
+                <div class="form-group">
+                  <label for="memberId"
+                    >아이디 <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="text"
+                    id="memberId"
+                    name="memberId"
+                    class="form-control"
+                    placeholder="아이디를 입력해주세요"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="password"
+                    >비밀번호 <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="비밀번호를 입력해주세요"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="passwordCheck"
+                    >비밀번호 확인 <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="password"
+                    id="passwordCheck"
+                    class="form-control"
+                    placeholder="비밀번호를 다시 입력해주세요"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="name"
+                    >이름 <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="form-control"
+                    placeholder="이름을 입력해주세요"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label from="email">이메일</label>
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="ex) user@test.com"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="phone"
+                    >전화번호 <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="text"
+                    id="phone"
+                    name="phone"
+                    class="form-control"
+                    placeholder="ex) 010-1234-5678"
+                  />
+                </div>
+
+                <hr class="margin-top-20 margin-bottom-20" />
+
+                <div class="text-right">
+                  <a th:href="@{/login.do}" class="btn btn-default btn-bordered"
+                    >취소</a
+                  >
+                  <button type="submit" class="btn btn-primary">
+                    가입하기
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      function checkValidation() {
+        var form = document.forms[0];
+
+        // 1. 아이디 입력 확인
+        if (form.memberId.value == "") {
+          alert("아이디를 입력해주세요.");
+          form.memberId.focus();
+          return false; // 전송 중단
+        }
+
+        // 2. 비밀번호 입력 확인
+        if (form.password.value == "") {
+          alert("비밀번호를 입력해주세요.");
+          form.password.focus();
+          return false;
+        }
+
+        // 3. 비밀번호 서로 같은지 확인
+        var pw1 = form.password.value;
+        var pw2 = document.getElementById("passwordCheck").value;
+
+        if (pw1 != pw2) {
+          alert("비밀번호가 일치하지 않습니다.");
+          form.password.focus();
+          return false;
+        }
+
+        // 4. 이름 입력 확인
+        if (form.name.value == "") {
+          alert("이름을 입력해주세요.");
+          form.name.focus();
+          return false;
+        }
+
+        // 5. 전화번호 검사
+        if (form.phone.value == "") {
+          alert("전화번호를 입력해주세요.");
+          form.phone.focus();
+          return false;
+        }
+
+        return true;
+      }
+    </script>
+  </body>
+</html>
